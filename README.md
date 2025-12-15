@@ -1,6 +1,6 @@
 # 💰 FinanciApp - Gestão Financeira Inteligente (TALL Stack)
 
-![PHP Version](https://img.shields.io/badge/php-%5E8.2-777BB4?style=flat&logo=php)
+![PHP Version](https://img.shields.io/badge/php-%5E8.4-777BB4?style=flat&logo=php)
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat&logo=laravel)
 ![Filament](https://img.shields.io/badge/FilamentPHP-v4-F2C94C?style=flat&logo=filament)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?style=flat&logo=tailwindcss)
@@ -56,8 +56,8 @@ Este projeto utiliza **Laravel Sail** para um ambiente de desenvolvimento padron
 1. **Clone o repositório:**
 
 ```bash
-git clone [https://github.com/seu-usuario/simple-finance.git](https://github.com/seu-usuario/simple-finance.git)
-cd simple-finance
+git clone [https://github.com/jpmerlotti/FinanciApp.git](https://github.com/jpmerlotti/FinanciApp.git)
+cd FinanciApp
 ```
 
 2. **Configure o ambiente:**
