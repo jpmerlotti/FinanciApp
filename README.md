@@ -12,6 +12,7 @@
 <img width="1919" height="908" alt="image" src="https://github.com/user-attachments/assets/469d174b-c2f1-4783-85fa-8302c2ecba4b" />
 <img width="1920" height="1272" alt="image" src="https://github.com/user-attachments/assets/9e02b7b4-491d-48ea-8660-ee319a96c207" />
 <img width="1920" height="990" alt="image" src="https://github.com/user-attachments/assets/cd2bebb3-4a4d-4c23-a36a-3480fc628f6d" />
+<img width="1920" height="1065" alt="image" src="https://github.com/user-attachments/assets/9abccc52-2895-4646-b5d8-80cc9d3ddccb" />
 
 
 ## 🚀 Sobre o Projeto
