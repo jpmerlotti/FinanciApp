@@ -1,4 +1,4 @@
-# 💰 SimpleFinance - Gestão Financeira Inteligente (TALL Stack)
+# 💰 FinanciApp - Gestão Financeira Inteligente (TALL Stack)
 
 ![PHP Version](https://img.shields.io/badge/php-%5E8.2-777BB4?style=flat&logo=php)
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat&logo=laravel)
