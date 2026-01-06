@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Transactions\Pages;
 
 use App\Filament\Resources\Transactions\TransactionResource;
-use App\Models\Transaction;
+use App\Filament\Resources\Transactions\Widgets\FinancialHealthOverview;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
@@ -19,21 +19,19 @@ class ListTransactions extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        $isStatsVisible = session('show_stats', true);
+        // $isStatsVisible = session('show_stats', true);
 
         return [
-            Action::make('toggleStats')
-                ->label($isStatsVisible ? 'Ocultar Resumo' : 'Mostrar Resumo')
-                ->icon($isStatsVisible ? 'heroicon-m-eye-slash' : 'heroicon-m-chart-bar')
-                ->color('gray')
-                ->size('sm') // Botão discreto
-                ->action(function () use ($isStatsVisible) {
-                    // Inverte o valor na sessão
-                    session()->put('show_stats', !$isStatsVisible);
+            // Action::make('toggleStats')
+            //     ->label($isStatsVisible ? 'Ocultar Resumo' : 'Mostrar Resumo')
+            //     ->icon($isStatsVisible ? 'heroicon-m-eye-slash' : 'heroicon-m-chart-bar')
+            //     ->color('gray')
+            //     ->size('sm')
+            //     ->action(function () use ($isStatsVisible) {
+            //         session()->put('show_stats', !$isStatsVisible);
 
-                    // Recarrega a página para aplicar a mudança (evita complexidade de re-render do Livewire)
-                    return redirect(request()->header('Referer'));
-                }),
+            //         return redirect(request()->header('Referer'));
+            //     }),
 
             CreateAction::make(),
         ];
@@ -43,18 +41,16 @@ class ListTransactions extends ListRecords
     {
         $currentYear = now()->year;
         $nextYear = $currentYear + 1;
+        $pastYear = $currentYear - 1;
 
         $tabs = [];
-
+            
         $tabs[] = Tab::make((string) $currentYear)
             ->icon('heroicon-m-calendar')
             ->query(fn (Builder $query) => $query
-                ->whereYear('transaction_date', $currentYear)
-            )
-            ->badge(
-                Transaction::whereYear('transaction_date', $currentYear)
-                    ->count()
+                ->whereYear('due_date', $currentYear)
             );
+        
 
         for ($month = 1; $month <= 12; $month++) {
 
@@ -65,24 +61,15 @@ class ListTransactions extends ListRecords
 
             $tabs[$key] = Tab::make($monthName)
                 ->query(fn (Builder $query) => $query
-                    ->whereYear('transaction_date', $currentYear)
-                    ->whereMonth('transaction_date', $month)
-                )
-                ->badge(
-                    Transaction::whereYear('transaction_date', $currentYear)
-                        ->whereMonth('transaction_date', $month)
-                        ->count()
+                    ->whereYear('due_date', $currentYear)
+                    ->whereMonth('due_date', $month)
                 );
         }
 
         $tabs['next_year'] = Tab::make((string) $nextYear)
             ->icon('heroicon-m-calendar')
             ->query(fn (Builder $query) => $query
-                ->whereYear('transaction_date', $nextYear)
-            )
-            ->badge(
-                Transaction::whereYear('transaction_date', $nextYear)
-                    ->count()
+                ->whereYear('due_date', $nextYear)
             );
 
         $tabs['all'] = Tab::make('Geral')
@@ -103,7 +90,7 @@ class ListTransactions extends ListRecords
         }
 
         return [
-            TransactionResource\Widgets\Balance::class,
+            FinancialHealthOverview::class
         ];
     }
 }

@@ -1,0 +1,64 @@
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../vendor/awcodes/palette/resources/**/*/blade.php';
+
+:root {
+    --c-gray-50: 250, 250, 249;
+    /* Stone-50 */
+    --c-gray-100: 245, 245, 244;
+    /* Stone-100 */
+    --c-gray-200: 231, 229, 228;
+    /* Stone-200 (para bordas sutis) */
+    --c-gray-900: 28, 25, 23;
+    /* Stone-900 */
+    --c-gray-950: 12, 10, 9;
+    /* Stone-950 */
+}
+
+.fi-body {
+    /* Força o background da página inteira ser cinza claro no light mode */
+    @apply bg-gray-50 dark:bg-gray-950;
+}
+
+/* Tabelas e Widgets: Forçar fundo branco para criar o efeito "Card" */
+.fi-section,
+.fi-wi-stats-overview-stat,
+.fi-ta-ctn {
+    @apply bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-200 dark:ring-gray-800;
+}
+
+/* Sidebar: Ajuste para harmonia pastel */
+.fi-sidebar {
+    @apply bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800;
+}
+
+/* Topbar: Branca para separar do conteúdo */
+.fi-topbar {
+    @apply bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800;
+}
+
+.palette-color-picker-item {
+    @apply rounded-full mr-4;
+
+    div {
+        @apply h-8 w-8;
+
+        input {
+            @apply mb-4;
+        }
+
+        span {
+            @apply -mt-1;
+        }
+    }
+}
+
+.palette-color-picker-item:hover {
+    @apply border-2 border-gray-800 dark:border-gray-200;
+}
+
+.palette-color-picker-item-active {
+    @apply border-2 border-gray-800 dark:border-gray-200;
+}

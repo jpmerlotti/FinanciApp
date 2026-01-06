@@ -4,5 +4,5 @@ return [
     'Pending' => 'Pendente',
     'Completed' => 'Concluído',
     'Canceled' => 'Cancelado',
-    'Overdue' => 'Atrasado/Vencido'
+    'Overdue' => 'Atrasado'
 ];

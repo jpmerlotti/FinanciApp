@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Transactions\TransactionResource\Widgets;
+namespace App\Filament\Resources\Transactions\Widgets;
 
 use App\Enums\TransactionTypes;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
@@ -25,10 +25,10 @@ class Balance extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $yearQuery = Transaction::query()->whereYear('transaction_date', now()->year);
+        $yearQuery = Transaction::query()->whereYear('due_date', now()->year);
 
-        $yearIncome  = (clone $yearQuery)->where('amount_cents', '>', 0)->sum('amount_cents');
-        $yearExpense = (clone $yearQuery)->where('amount_cents', '<', 0)->sum('amount_cents');
+        $yearIncome  = (clone $yearQuery)->where('type', TransactionTypes::INCOME->value)->sum('amount_cents');
+        $yearExpense = -1 * (clone $yearQuery)->where('type', TransactionTypes::EXPENSE->value)->sum('amount_cents');
         $yearBalance = $yearIncome + $yearExpense;
 
         $currentYearIncomes = (clone $yearQuery)
@@ -44,8 +44,8 @@ class Balance extends StatsOverviewWidget
         $tabIncome = 0; $tabExpense = 0; $tabBalance = 0;
 
         if ($tabQuery) {
-            $tabIncome  = (clone $tabQuery)->where('amount_cents', '>', 0)->sum('amount_cents');
-            $tabExpense = (clone $tabQuery)->where('amount_cents', '<', 0)->sum('amount_cents');
+            $tabIncome  = (clone $tabQuery)->where('type', TransactionTypes::INCOME->value)->sum('amount_cents');
+            $tabExpense = -1 * (clone $tabQuery)->where('type', TransactionTypes::EXPENSE->value)->sum('amount_cents');
             $tabBalance = $tabIncome + $tabExpense;
 
             $tabIncomes = (clone $tabQuery)->where('type', TransactionTypes::INCOME)->count();
@@ -103,7 +103,7 @@ class Balance extends StatsOverviewWidget
         if (!$query) return [];
 
         return (clone $query)
-            ->latest('transaction_date')
+            ->latest('due_date')
             ->take(7)
             ->pluck('amount_cents')
             ->map(fn ($val) => $val / 100)

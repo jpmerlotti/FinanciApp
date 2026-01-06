@@ -1,6 +1,5 @@
 services:
     financial:
-        container_name: 'financial_app'
         build:
             context: './vendor/laravel/sail/runtimes/8.5'
             dockerfile: Dockerfile
@@ -10,7 +9,8 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '${FORWARD_HTTP_PORT:-80}:80'
+            - '${FORWARD_HTTPS_PORT:-443}:443'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -21,14 +21,13 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-            - dev_network
         depends_on:
             - pgsql
             - minio
     pgsql:
         image: 'postgres:18-alpine'
         ports:
-            - '${FORWARD_DB_PORT:-54321}:5432'
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
             PGPASSWORD: '${DB_PASSWORD:-secret}'
             POSTGRES_DB: '${DB_DATABASE}'
@@ -74,8 +73,6 @@ services:
 networks:
     sail:
         driver: bridge
-    dev_network:
-        external: true
 volumes:
     sail-pgsql:
         driver: local

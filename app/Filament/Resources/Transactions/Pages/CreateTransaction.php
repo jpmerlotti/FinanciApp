@@ -5,10 +5,15 @@ namespace App\Filament\Resources\Transactions\Pages;
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
+
+use App\Filament\Resources\Transactions\Concerns\HandlesRecurrence;
 
 class CreateTransaction extends CreateRecord
 {
+    use HandlesRecurrence;
+
     protected static string $resource = TransactionResource::class;
     protected array $repeatData = [];
 
@@ -30,54 +35,16 @@ class CreateTransaction extends CreateRecord
 
     protected function afterCreate(): void
     {
+        $this->suffixTitleWithMonth($this->record);
+
         if (empty($this->repeatData['repeat_transaction']) || empty($this->repeatData['repeat_count'])) {
             return;
         }
 
-        $groupId = str()->uuid();
-        $count = (int) $this->repeatData['repeat_count'];
-        $interval = $this->repeatData['repeat_interval'] ?? 'monthly';
-        $totalInstallments = $count + 1;
-
-        $this->record->update([
-            'recurring_group_id' => $groupId,
-            'installment_number' => 1,
-            'total_installments' => $totalInstallments,
-        ]);
-
-        $baseDate = Carbon::parse($this->record->transaction_date);
-        $newTransactions = [];
-
-        for ($i = 1; $i <= $count; $i++) {
-
-            $nextDate = $baseDate->copy();
-            match ($interval) {
-                'weekly'       => $nextDate->addWeeks($i),
-                'monthly'      => $nextDate->addMonthsNoOverflow($i),
-                'semiannually' => $nextDate->addMonthsNoOverflow($i * 6),
-                'annually'     => $nextDate->addYears($i),
-            };
-
-            $newTransactions[] = [
-                'recurring_group_id' => $groupId,
-                'installment_number' => $i + 1,
-                'total_installments' => $totalInstallments,
-
-                'title'            => $this->record->title,
-                'type'             => $this->record->type,
-                'amount_cents'     => $this->record->amount_cents,
-                'status'           => 'pending',
-                'transaction_date' => $nextDate,
-                'recipient'        => $this->record->recipient,
-                'description'      => $this->record->description,
-                'payment_proof'    => null,
-                'created_at'       => now(),
-                'updated_at'       => now(),
-            ];
-        }
-
-        if (! empty($newTransactions)) {
-            Transaction::insert($newTransactions);
-        }
+        $this->createRecurringTransactions(
+            $this->record, 
+            (int) $this->repeatData['repeat_count'], 
+            $this->repeatData['repeat_interval'] ?? 'monthly'
+        );
     }
 }

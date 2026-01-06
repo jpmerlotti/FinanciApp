@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Transactions;
 use App\Filament\Resources\Transactions\Pages\CreateTransaction;
 use App\Filament\Resources\Transactions\Pages\EditTransaction;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
+use App\Filament\Resources\Transactions\RelationManagers\RecurrenceGroupRelationManager;
 use App\Filament\Resources\Transactions\Schemas\TransactionForm;
 use App\Filament\Resources\Transactions\Tables\TransactionsTable;
 use App\Models\Transaction;
@@ -18,7 +19,7 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentCurrencyDollar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -38,14 +39,14 @@ class TransactionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RecurrenceGroupRelationManager::class
         ];
     }
 
     public static function getWidgets(): array
     {
         return [
-            TransactionResource\Widgets\Balance::class,
+            Widgets\FinancialHealthOverview::class
         ];
     }
 
